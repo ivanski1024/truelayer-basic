@@ -1,10 +1,9 @@
+'use strict';
+
 const app = require('express')();
+const config = require('config').get('AppConfig');
+
 const authentication  =  require('./routes/authentication')
-
-global.config = require('config').get('AppConfig');
-global.baseUrl = (`${config.protocol}://${config.host}:${config.port}/`).toString();
-global.redirectUrl = baseUrl + 'callback';
-
 
 app.get('/', async (req, res) => {
     return await authentication.handleGetRoot(req, res);

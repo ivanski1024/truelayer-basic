@@ -9,10 +9,8 @@
             "request": "launch",
             "name": "nodemon",
             "runtimeExecutable": "nodemon",
-            "program": "${workspaceFolder}/index.js",
-            "restart": true,
-            "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen"
+            "program": "${workspaceFolder}/app.js",
+            "restart": true
         },
     ]
 }
