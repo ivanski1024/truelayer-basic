@@ -1,3 +1,5 @@
+'use string';
+
 const uuidv4 = require('uuid/v4');
 
 createUser = async function (tokens) {
