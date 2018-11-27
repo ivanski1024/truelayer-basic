@@ -2,15 +2,21 @@
   "name": "truelayer-basic",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "config": "^3.0.0",
+    "dotenv": "^6.1.0",
     "express": "^4.16.4",
-    "sequelize": "^4.41.2"
+    "sequelize": "^4.41.2",
+    "truelayer-client": "^1.0.9"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.6"
   }
 }
