@@ -1,0 +1,11 @@
+{
+    "AppConfig": {
+        "protocol": "http",
+        "host": "localhost",
+        "port": "1337",
+        "trueLayer": {
+        "scopes": ["info", "accounts", "balance", "transactions", "offline_access", "cards"],
+            "enableMock": true
+        }
+    }
+}
