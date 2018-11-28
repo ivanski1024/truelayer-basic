@@ -1,11 +1,11 @@
 'use string';
 
 const uuidv4 = require('uuid/v4');
+const User = global.models.User;
 
-createUser = async function (tokens) {
-    const userId = uuidv4();
-    // await User.create({ access_token: tokens.accessToken, refresh_token: tokens.refreshToken, user_id: userId });
-    return userId;
+createUser = async function (tokens) {    
+    let user = await User.create({access_token: tokens.accessToken, refresh_token: tokens.refreshToken});
+    return user.id;
 }
 
 storeTransactions = async function (transactions) {

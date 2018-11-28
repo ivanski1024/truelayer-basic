@@ -1,21 +1,23 @@
 'use strict';
 
-module.exports = function(sequalize, DataTypes) {
-    return {
-        user_id: {
-            type: DataTypes.STRING,
-            validate: {
-                isUUID: 4
-            }
+module.exports = (sequelize, DataTypes, options = null) => {
+    let model = sequelize.define('user', {
+        id: {
+            type: DataTypes.UUID,
+            primaryKey: true,
+            defaultValue: DataTypes.UUIDV4,
+            allowNull: false,
+            autoIncrement: false,
         },
         access_token: {
-            type: DataTypes.STRING,
-            columnType: "varchar(1280)",
-            required: true
+            type: DataTypes.STRING(1280),
+            allowNull: false,
         },
         refresh_token: {
-            type: DataTypes.STRING,
-            required: true
+            type: DataTypes.UUID,
+            allowNull: false,
         }
-    }
-}
+    }, options);
+    
+    return model;
+};

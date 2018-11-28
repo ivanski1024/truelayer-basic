@@ -2,17 +2,20 @@
 
 const app = require('express')();
 const config = require('config').get('AppConfig');
+const uuid = require('uuid/v4');
 
-const authentication  =  require('./routes/authentication')
+const authentication  =  require('./routes/authentication');
 
-app.get('/', async (req, res) => {
-    return await authentication.handleGetRoot(req, res);
-})
-
-app.get('/callback', async (req, res) => {
-    return await authentication.handleCallback(req, res);
-})
-
-app.listen(config.port, () => {
-    console.log(`Server listening at ${global.baseUrl} `);
-})
+module.exports = function() {
+    app.get('/', async (req, res) => {
+        return await authentication.handleGetRoot(req, res);
+    })
+    
+    app.get('/callback', async (req, res) => {
+        return await authentication.handleCallback(req, res);
+    })
+    
+    app.listen(config.port, () => {
+        console.log(`Server listening at ${global.baseUrl} `);
+    })
+}
