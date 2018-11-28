@@ -11,10 +11,6 @@ module.exports = async function () {
         underscored: true 
     };
 
-    const syncOptions = {
-        force: true
-    }
-
     const Transaction = require('./models/transaction')(sequelize, DataTypes, modelOptions);
     const Account = require('./models/account')(sequelize, DataTypes, modelOptions);
     const User = require('./models/user')(sequelize, DataTypes, modelOptions);
@@ -25,7 +21,9 @@ module.exports = async function () {
     Account.hasMany(Transaction, {foreignKey: 'account_id', targetKey: 'id'});
     Transaction.belongsTo(Account, {foreignKey: 'account_id', targetKey: 'id'});
 
-    sequelize.sync();
+    sequelize.sync({
+        force: true // TODO: remove thi
+    });
 
     return {
         User,

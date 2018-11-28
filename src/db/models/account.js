@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = (sequelize, DataTypes, options = null, parentModel = null) => {
+module.exports = (sequelize, DataTypes, options = null) => {
     let model = sequelize.define('account', {
         id: {
             type: DataTypes.UUID,
@@ -13,6 +13,14 @@ module.exports = (sequelize, DataTypes, options = null, parentModel = null) => {
             type: DataTypes.UUID,
             foreignKey: true,
             allowNull: false,
+        },
+        type: {
+            type: DataTypes.ENUM(['bank', 'card']),
+            allowNull: false
+        },
+        data: {
+            type: DataTypes.JSON,
+            allowNull: false
         }
     }, options);
 

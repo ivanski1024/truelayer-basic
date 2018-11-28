@@ -9,8 +9,8 @@ const config = require('config').get('AppConfig');
 global.baseUrl = (`${config.protocol}://${config.host}:${config.port}/`).toString();
 global.redirectUrl = baseUrl + 'callback';
 
-// start db
+// start db 
 global.models = require('./src/db/index')();
 
-// run serverda
+// run server
 require('./src/index.js')();

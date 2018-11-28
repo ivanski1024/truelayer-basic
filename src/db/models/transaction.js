@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes, options = null) => {
             type: DataTypes.UUID,
             foreignKey: true,
             allowNull: false,
+        },
+        data: {
+            type: DataTypes.JSON,
+            allowNull: false
         }
     }, options);
 

@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes, options = null) => {
             allowNull: false,
         },
         refresh_token: {
-            type: DataTypes.UUID,
+            type: DataTypes.STRING,
             allowNull: false,
         }
     }, options);
