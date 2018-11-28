@@ -2,7 +2,6 @@
 
 const app = require('express')();
 const config = require('config').get('AppConfig');
-const uuid = require('uuid/v4');
 
 const authentication  =  require('./routes/authentication');
 
