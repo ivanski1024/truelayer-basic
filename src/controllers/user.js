@@ -1,33 +1,45 @@
 'use string';
 
-const uuidv4 = require('uuid/v4');
 const User = global.models.User;
+const Account = global.models.Account;
+const Transaction = global.models.Transaction;
 
-createUser = async function (tokens) {    
-    let user = await User.create({access_token: tokens.accessToken, refresh_token: tokens.refreshToken});
-    return user.id;
+const storeUser = async function(tokens)  {
+  return (await User.create({ access_token: tokens.accessToken, refresh_token: tokens.refreshToken })).id;
 }
 
-storeTransactions = async function (transactions) {
-    // return await transactions.forEach(async transactionsPerAccount => {
-    //     return await Transaction.createEach(transactionsPerAccount);
-    // });
-    
-    throw new Error('NOT IMPLEMENTED!');
-}
+const storeAccount = async function (userId, account, type) {
+  return await Account.create({ user_id: userId, data: JSON.stringify(account), type: type });
+};
 
-getTransactions = async function (userId) {
-    // let result = await Transaction.find({ where: { user_id: userId }, groupBy: ['account_id'] });
-    // let result = await Transaction.query('SELECT * ')
-    // let transactions = await Transaction.
+const storeTransactions = async function (transactions) {
+  return await Transaction.bulkCreate(transactions);
+};
 
-    console.log('NOT IMPLEMENTED!');
-    throw new Error('NOT IMPLEMENTED!');
-    //Transaction.query('SELECT * ')
-}
+const getTransactions = async function (userId) {
+  let result = {};
+
+  let accounts = await Account.findAll({ where: { user_id: userId }});
+
+  await Promise.all(accounts.map(async (account) => {
+    let accountData = JSON.parse(account.data);
+
+    let transactions = await Transaction.findAll({ where: { account_id: account.id }});
+
+    let parsedTransactions = await transactions.map((transaction) => {
+      return JSON.parse(transaction.data);
+    });
+
+    accountData.transactions = parsedTransactions;
+    result[accountData.account_id] = accountData;
+  }));
+
+  return result;
+};
 
 module.exports = {
-    createUser,
-    storeTransactions,
-    getTransactions
-}
+  storeUser,
+  storeAccount,
+  storeTransactions,
+  getTransactions
+};
