@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 
 const authHandlers  =  require('./routes/authentication');
 const userHandlers = require('./routes/user');
+const helpers = require('./helpers');
 
 module.exports = function() {
     
@@ -15,7 +16,7 @@ module.exports = function() {
         try {
             await authHandlers.handleGetRoot(req, res);
         } catch (err) {
-            next({ status: 'failed', error: 'root request error'});
+            res.status(501).send({ error: 'Internal Server Error' });
         }
     })
     
@@ -24,19 +25,37 @@ module.exports = function() {
             let userId =  await authHandlers.handleCallback(req, res);
             res.send({ status: 'success', userId: userId });
         } catch (err) {
-            next({ status: 'failed', error: 'callback error' });
+            res.status(501).send({ error: 'Internal Server Error' });
         }
     })
 
-    app.get('/transactions', async (req, res, next) => {
+    app.get('/user/transactions', async (req, res, next) => {
         let userId = req.query.userId;
         if(!userId) { 
             next({ status: 'failed', error: 'userId query parameter missing'});
         }
 
-        let transactions = await userHandlers.fetchUserTransactions(userId);
+        try {
+            let transactions = await userHandlers.fetchUserTransactions(userId);
+            res.send(transactions);
+        } catch (err) {
+            res.status(501).send({ error: 'Internal Server Error' });
+            
+        }
+    })
 
-        res.send(transactions);
+    app.get('/user/debug', async (req, res, next) => {
+        let userId = req.query.userId;
+        if(!userId) { 
+            next({ status: 'failed', error: 'userId query parameter missing'});
+        }
+
+        try {
+            let debugInformation = await helpers.fetchDebugInformation(userId);
+            res.send(debugInformation);
+        } catch (err) {
+            res.status(501).send({ error: 'Internal Server Error' });
+        }
     })
     
     app.listen(config.port, () => {

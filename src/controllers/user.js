@@ -16,6 +16,14 @@ const storeTransactions = async function (transactions) {
   return await Transaction.bulkCreate(transactions);
 };
 
+const getUser = async function (userId) {
+  return await User.find({ id: userId });
+};
+
+const updateUser = async function (userId, newValues) {
+  return await User.update(newValues, Object.keys(newValues));
+}
+
 const getTransactions = async function (userId) {
   let result = {};
 
@@ -41,5 +49,7 @@ module.exports = {
   storeUser,
   storeAccount,
   storeTransactions,
-  getTransactions
+  getUser,
+  getTransactions,
+  updateUser
 };

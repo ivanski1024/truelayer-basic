@@ -2,7 +2,7 @@
 
 const TrueLayerController = require('./../controllers/truelayer');
 const UserController = require('./../controllers/user');
-const { parseTransaction } = require('./../helpers');
+const { fetchTransactions } = require('./../helpers');
 
 const handleGetRoot = async (req, res) => {
   let authUrl = TrueLayerController.getAuthUrl(redirectUrl);
@@ -16,38 +16,11 @@ const handleCallback = async (req, res) => {
 
     let accessToken = tokens.accessToken;
 
-    // fetch accounts 
-    let accounts = await TrueLayerController.fetchAccounts(accessToken);
+    // fetch and store bank transactions
+    fetchTransactions(TrueLayerController.fetchAccounts, TrueLayerController.fetchBankTransactions, userId, accessToken, 'bank');
 
-    accounts.forEach(async (account) => {
-      //store account
-      let storedAccount = await UserController.storeAccount(userId, account, 'bank');
-
-      // fetch transaction
-      let fetchedTransactions = await TrueLayerController.fetchBankTransactions(accessToken, account.account_id);
-
-      // parse transactions 
-      let parsedTransactions = fetchedTransactions.map((transaction) => { return parseTransaction(transaction, storedAccount.id); });
-
-      // store transactions
-      UserController.storeTransactions(parsedTransactions, storedAccount.id);
-    });
-
-    let cards = await TrueLayerController.fetchCards(accessToken);
-
-    cards.forEach(async (card) => {
-      // store card   
-      let storedCard = await UserController.storeAccount(userId, card, 'card');
-
-      // fetch transaction
-      let fetchedTransactions = await TrueLayerController.fetchCardTransactions(accessToken, card.account_id);
-
-      // parse Transactions
-      let parsedTransaction = fetchedTransactions.map((transaction) => { return parseTransaction(transaction, storedCard.id); });
-
-      //store transactions
-      UserController.storeTransactions(parsedTransaction, storedCard.id);
-    });
+    // fetch and store card transactions
+    fetchTransactions(TrueLayerController.fetchCards, TrueLayerController.fetchCardTransactions, userId, accessToken, 'card');
         
     return res.status(200).send({status: 'success', userId});
   } catch (err) {
