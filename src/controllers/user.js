@@ -21,7 +21,9 @@ const getUser = async function (userId) {
 };
 
 const updateUser = async function (userId, newValues) {
-  return await User.update(newValues, Object.keys(newValues));
+  return await User.find({ where: { id: userId }}).on('success', (user) => {
+    user.update( newValues, Object.keys(newValues));
+  });
 }
 
 const getTransactions = async function (userId) {
