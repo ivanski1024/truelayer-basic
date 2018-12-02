@@ -39,11 +39,6 @@ module.exports = function() {
         return res.send({ status: 'success', result: { debugInformation: await helpers.fetchDebugInformation(req.query.userId)}});
     })
 
-    app.use('/*', async (req, res, next) => {
-        console.log(JSON.stringify(req, null, 4))
-        next()
-    })
-
     app.use((err, req, res, next) => {
         return res.status(500).send({ status: 'failed', error: 'Internal Server Error' })
     })
