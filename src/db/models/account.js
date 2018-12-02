@@ -22,7 +22,14 @@ module.exports = (sequelize, DataTypes, options = null) => {
       type: DataTypes.JSON,
       allowNull: false
     }
-  }, options);
+  }, {
+    indexes: [ 
+      {
+        fields: ['user_id']
+      }
+    ], 
+    ...options
+  });
 
   return model;
 };
