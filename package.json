@@ -18,6 +18,7 @@
     "mysql2": "^1.6.4",
     "sequelize": "^4.41.2",
     "truelayer-client": "^1.0.9",
+    "validator": "^10.9.0",
     "winston": "^3.1.0"
   },
   "devDependencies": {
