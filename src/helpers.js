@@ -68,21 +68,25 @@ const fetchDebugInformation = async function (userId) {
   result['getAccounts'] = await getDebugInformationForCall(TrueLayerController.fetchAccounts, {accessToken: accessToken})
   if ( result.getAccounts.status == 'succeded' ) {
     let accounts = result.getAccounts.callResult;
-    result['getTransactions'] = {}
-    await Promise.all(accounts.forEach(async account => {
+    result['getTransactions'] = {};
+
+    for (let index = 0; index < accounts.length; index++) {
+      const account = accounts[index];
       let debugInfo = await getDebugInformationForCall(TrueLayerController.fetchBankTransactions, { accessToken, accountId: account.account_id })
       result.getTransactions[account.account_id] = debugInfo;
-    }))
+    }
   }
   
   result['getCards'] = await getDebugInformationForCall(TrueLayerController.fetchCards, {accessToken: accessToken})
   if ( result.getCards.status == 'succeded' ) {
     let cards = result.getCards.callResult;
-    result['getCardTransactions'] = {}
-    await Promise.all(cards.forEach(async card => {
+    result['getCardTransactions'] = {};
+
+    for (let index = 0; index < cards.length; index++) {
+      const card = cards[index];
       let debugInfo = await getDebugInformationForCall(TrueLayerController.fetchCardTransactions, { accessToken, accountId: card.account_id })
       result.getCardTransactions[card.account_id] = debugInfo;
-    }))
+    }
   }
 
   return result
