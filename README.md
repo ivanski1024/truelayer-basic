@@ -51,3 +51,10 @@ npm start
 3. To get your transactions just call `http://localhost:1337/user/transactions?userId=<your_user_id>`
 
 4. To get debug information you can access `http://localhost:1337/user/debug?userId=<your_user_id>` and pass the userId again.
+
+
+## SOME AMBIGUOUS DETAILS
+
+1. Each time a client passes through the TrueLayer's login is handled as different user in this app, although it is not secured. Still this is for demo purposes.
+
+2. This app doesn't not give you error if you try to call for example /user/transactions endpoint with a valid UUID, but such that there is no user with that ID.
