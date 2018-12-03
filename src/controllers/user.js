@@ -17,13 +17,12 @@ const storeTransactions = async function (transactions) {
 };
 
 const getUser = async function (userId) {
-  return await User.find({ id: userId });
+  return await User.findByPk(userId);
 };
 
 const updateUser = async function (userId, newValues) {
-  return await User.find({ where: { id: userId }}).on('success', (user) => {
-    user.update( newValues, Object.keys(newValues));
-  });
+  let user = await User.findByPk(userId);
+  return await user.update( newValues, Object.keys(newValues));
 }
 
 const getTransactions = async function (userId) {
