@@ -15,9 +15,9 @@ module.exports = function() {
     app.all('/user/*', (req, res, next) => {
         let userId = req.query.userId;
         if (!userId) {
-            return res.status(400).send({ status: 'failed', error: 'userId query parameter required'});
+            return res.status(400).send({ status: 'failed', message: 'Client Side Error', error: 'userId query parameter required'});
         } else if (!isUUID(userId)) {
-            return res.status(400).send({ status: 'failed', error: 'userId should be a valid UUID'});
+            return res.status(400).send({ status: 'failed',  message: 'Client Side Error', error: 'userId should be a valid UUID'});
         } else {
             next();
         }
@@ -28,19 +28,27 @@ module.exports = function() {
     })
     
     app.get('/callback', async (req, res) => {
-        return res.send({ status: 'success', result: { userId: await authHandlers.handleCallback(req, res) } });
+        try {
+            return res.send({ status: 'success', result: { userId: await authHandlers.handleCallback(req, res) } });
+        } catch (error) {
+            return res.status(500).send({ status: 'failed', message: 'Internal Server Error', error })
+        }
     })
 
     app.get('/user/transactions', async (req, res) => {
-        return res.send({ status: 'success', result: { transactions: await userHandlers.fetchUserTransactions(req.query.userId)}});
+        try {
+            return res.send({ status: 'success', result: { transactions: await userHandlers.fetchUserTransactions(req.query.userId)}});
+        } catch (error) {
+            return res.status(500).send({ status: 'failed', message: 'Internal Server Error', error })
+        }
     })
 
     app.get('/user/debug', async (req, res) => {
-        return res.send({ status: 'success', result: { debugInformation: await helpers.fetchDebugInformation(req.query.userId)}});
-    })
-
-    app.use((err, req, res, next) => {
-        return res.status(500).send({ status: 'failed', error: 'Internal Server Error' })
+        try {
+            return res.send({ status: 'success', result: { debugInformation: await helpers.fetchDebugInformation(req.query.userId)}});
+        } catch (error) {
+            return res.status(500).send({ status: 'failed', message: 'Internal Server Error', error })
+        }
     })
     
     app.listen(config.port, () => {
